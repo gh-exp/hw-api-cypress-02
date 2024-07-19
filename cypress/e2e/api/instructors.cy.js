@@ -6,12 +6,12 @@ let randomInstructorId = Math.floor(Math.random() * 4) + 1
 postRequestBody.INSTRUCTOR_ID = randomInstructorId
 
 describe('API-Cypress Project02', () => {
-  before('Delete All', () => {
-    cy.request({
-      method: 'DELETE',
-      url: `${Cypress.env('baseURLStudents')}/all/delete`,
-    })
-  })
+  // before('Delete All', () => {
+  //   cy.request({
+  //     method: 'DELETE',
+  //     url: `${Cypress.env('baseURLStudents')}/all/delete`,
+  //   })
+  // })
 
   it('TASK-1: Get All Instructors', () => {
     cy.request({
@@ -54,6 +54,7 @@ describe('API-Cypress Project02', () => {
     }).then(function (response) {
       expect(response.status).to.equal(201)
       studentID = response.body.STUDENT_ID
+      cy.wrap(response.body.STUDENT_ID).as('studentId')
       // console.log(JSON.stringify(response.body, null, 2))
     })
     cy.request({
@@ -69,11 +70,14 @@ describe('API-Cypress Project02', () => {
       // console.log(studentID)
       cy.log(`Student ID ${studentID}`)
     })
-    cy.request({
-      method: 'DELETE',
-      url: `${Cypress.env('baseURLStudents')}/${studentID}`,
-    }).then((response) => {
-      expect(response.status).to.equal(200)
+
+    cy.get('@studentId').then((studentID) => {
+      cy.request({
+        method: 'DELETE',
+        url: `${Cypress.env('baseURLStudents')}/${studentID}`,
+      }).then((response) => {
+        expect(response.status).to.equal(200)
+      })
     })
   })
 })
