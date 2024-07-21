@@ -25,6 +25,7 @@ describe('API-Cypress Project02', () => {
         expect(instructor).to.have.property('INSTRUCTOR_ID')
         expect(instructor).to.have.property('FULLNAME')
         expect(instructor).to.have.property('STUDENTS')
+        expect(response.body).that.is.an('array')
       })
       const expectedIds = [1, 2, 3, 4]
       const actualIds = response.body.map((instructor) => instructor.INSTRUCTOR_ID)
@@ -38,8 +39,7 @@ describe('API-Cypress Project02', () => {
       url: `${Cypress.env('baseURLInstructors')}/${randomInstructorId}`,
     }).then((response) => {
       expect(response.status).to.equal(200)
-      expect(response.body.INSTRUCTOR_ID).to.eq(randomInstructorId)
-
+      expect(response.body.INSTRUCTOR_ID).to.eq(randomInstructorId) 
       expect(response.body).to.have.property('FULLNAME')
       expect(response.body).to.have.property('STUDENTS')
     })
@@ -70,13 +70,13 @@ describe('API-Cypress Project02', () => {
       // console.log(studentID)
       cy.log(`Student ID ${studentID}`)
     })
-
+    cy.log(`Student ID ${studentID}`)
     cy.get('@studentId').then((studentID) => {
       cy.request({
         method: 'DELETE',
         url: `${Cypress.env('baseURLStudents')}/${studentID}`,
       }).then((response) => {
-        expect(response.status).to.equal(200)
+        expect(response.status).to.equal(204)
       })
     })
   })
